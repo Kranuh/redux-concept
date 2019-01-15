@@ -1,4 +1,4 @@
-package timkranen.rdx.base
+package timkranen.rdx.rdx
 
 interface ReducerGroup<State> {
 

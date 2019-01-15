@@ -2,23 +2,26 @@ package timkranen.rdx.sample.view
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import timkranen.rdx.base.Dispatcher
+import io.reactivex.disposables.Disposable
+import timkranen.rdx.rdx.Dispatcher
+import timkranen.rdx.rdx_rx.RxStateEvent
 import timkranen.rdx.sample.SampleAppStore
 import timkranen.rdx.sample.model.AppState
 import timkranen.rdx.sample.model.LoginUser
 import timkranen.rdx.sample.model.LoginViewState
 
 // Use DI
-class MainViewModel(private val store: SampleAppStore): ViewModel() {
+class MainViewModel(store: SampleAppStore): ViewModel() {
 
     private var dispatcher: Dispatcher? = null
 
     val viewState = MutableLiveData<LoginViewState>()
 
+    private var stateDisposable: Disposable? = null
     init {
-        store.subscribe { state: AppState, dispatcher: Dispatcher ->
-            this.dispatcher = dispatcher
-            viewState.value = mapStateToViewState(state)
+        stateDisposable = store.observe { event ->
+            dispatcher = event.dispatcher
+            viewState.value = mapStateToViewState(event.state)
         }
     }
 
@@ -26,6 +29,11 @@ class MainViewModel(private val store: SampleAppStore): ViewModel() {
 
     fun login() {
         dispatcher?.invoke(LoginUser("1"))
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        stateDisposable?.dispose()
     }
 
 }

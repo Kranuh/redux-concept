@@ -1,6 +1,6 @@
 package timkranen.rdx.sample.model
 
-import timkranen.rdx.base.Action
+import timkranen.rdx.rdx.Action
 
 data class LoginUser(val userId: String): Action
 object LoginInProgress: Action

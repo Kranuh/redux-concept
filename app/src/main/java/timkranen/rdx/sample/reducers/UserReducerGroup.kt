@@ -1,8 +1,8 @@
 package timkranen.rdx.sample.reducers
 
-import timkranen.rdx.base.Action
-import timkranen.rdx.base.Reducer
-import timkranen.rdx.base.ReducerGroup
+import timkranen.rdx.rdx.Action
+import timkranen.rdx.rdx.Reducer
+import timkranen.rdx.rdx.ReducerGroup
 import timkranen.rdx.sample.model.*
 
 class UserReducerGroup: ReducerGroup<AppState> {

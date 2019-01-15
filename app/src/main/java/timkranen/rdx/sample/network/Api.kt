@@ -1,7 +1,7 @@
 package timkranen.rdx.sample.network
 
 import kotlinx.coroutines.*
-import timkranen.rdx.base.Dispatcher
+import timkranen.rdx.rdx.Dispatcher
 import timkranen.rdx.sample.model.LoginUserCompleted
 import timkranen.rdx.sample.model.User
 

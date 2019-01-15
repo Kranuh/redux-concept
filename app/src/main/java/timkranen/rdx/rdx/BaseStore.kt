@@ -1,15 +1,14 @@
-package timkranen.rdx.base
+package timkranen.rdx.rdx
 
 abstract class BaseStore<State>(initialState: State,
                                 private val reducers: List<Reducer<State>> = listOf(),
                                 private val middleware: List<Middleware<State>> = listOf()) : Store<State> {
 
-    private var currentState: State = initialState
-    private val subscriptions = arrayListOf<Subscription<State>>()
+    protected var currentState: State = initialState
 
     override fun getState(state: State): State = currentState
 
-    private fun dispatch(action: Action) {
+    protected fun dispatch(action: Action) {
         val newAction = applyMiddleware(currentState, action)
         val newState = applyReducers(currentState,
                                      newAction)
@@ -19,11 +18,11 @@ abstract class BaseStore<State>(initialState: State,
         }
 
         currentState = newState
-        subscriptions.forEach { subscription ->
-            subscription(currentState,
-                         ::dispatch)
-        }
+
+        publish()
     }
+
+    protected abstract fun publish()
 
     private fun applyMiddleware(state: State,
                                 action: Action): Action {
@@ -52,15 +51,5 @@ abstract class BaseStore<State>(initialState: State,
                                action)
         }
         return newState
-    }
-
-    override fun subscribe(subscription: Subscription<State>) {
-        subscriptions.add(subscription)
-        subscription(currentState,
-                     ::dispatch)
-    }
-
-    override fun unsubscribe(subscription: Subscription<State>) {
-        subscriptions.remove(subscription)
     }
 }
